@@ -26,7 +26,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'base_files'
-    #'base_files.apps.VueAppConfig'
 ]
 
 MIDDLEWARE = [
@@ -45,7 +44,8 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [BASE_DIR,
-        '/base_files/'],
+        '/base_files/'
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -113,7 +113,9 @@ STATIC_URL = '/static/'
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
-# STATICFILES_DIRS = ('','')
+STATICFILES_DIRS = (
+    'base_files/static',
+    )
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
