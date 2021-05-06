@@ -44,8 +44,7 @@ ROOT_URLCONF = 'django_garages.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR,
-        '/base_files/'
+        'DIRS': [BASE_DIR, '/base_files/'
         ],
         'APP_DIRS': True,
         'OPTIONS': {

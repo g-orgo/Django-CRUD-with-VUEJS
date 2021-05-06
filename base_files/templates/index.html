@@ -35,17 +35,31 @@
     <body>
         <b-container id="app">
             <b-row class="mt-2">
-                <b-btn
-                variant="success"
-                >
-                Adicionar vaga
-                </b-btn>
+                <b-btn variant="success"> Adicionar vaga </b-btn>
             </b-row>
-
             <b-row>
-                <b-table striped hover :items="garages_spots"></b-table>
-
+                [{ garages_spots }]
             </b-row>
+            
+            <!-- erro = garages is not defined -->
+            <!-- <b-row>
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Número da vaga</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="garages in garages_spots" :key="garage.garage_name">
+                        <th scope="row">[{ garages.garage_id }]</th>
+                        <td>[{garages.garage_name}]</td>
+                        <td>
+                            <b-btn variant="info" @onclick="getGaragesSpot(garages.garage_id)">Editar</b-btn>
+                            <b-btn variant="danger" @onclick="deleteGaragesSpot(garages.garage_id)">Deletar</b-btn>
+                        </td>
+                    </tr>
+                </tbody>
+            </b-row> -->
         </b-container>
     </body>
 
@@ -58,7 +72,7 @@
                 msg: "Vue instalado, Ramon :)",
                 current_garage_spot: {},
                 blank_spot: {
-                    place_name: null,
+                    garage_name: null,
                 },
             },
             methods: {
@@ -67,6 +81,7 @@
                         .get("api/garages/")
                         .then((res) => {
                             this.garages_spots = res.data;
+                            console.log(res);
                         })
                         .catch((err) => {
                             console.log(err);
