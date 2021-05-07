@@ -34,9 +34,6 @@
 
     <body>
         <b-container id="app">
-            <b-row class="mt-2">
-                <b-btn variant="success"> Adicionar vaga </b-btn>
-            </b-row>
             <b-row>
                 [{ garages_spots }]
             </b-row>
@@ -66,52 +63,7 @@
                         .catch((err) => {
                             console.log(err);
                         });
-                },
-                getGaragesSpot: function (id) {
-                    axios
-                        .get("api/garages/${id}/")
-                        .then((res) => {
-                            this.current_garage_spot = res.data;
-                        })
-                        .catch((err) => {
-                            console.log(err);
-                        });
-                },
-                addGaragesSpots: function () {
-                    axios
-                        .post("api/garages/", this.blank_spot)
-                        .then((res) => {
-                            this.getGaragesSpots();
-                        })
-                        .catch((err) => {
-                            console.log(err);
-                        });
-                },
-                updateGaragesSpot: function () {
-                    axios
-                        .put(
-                            "api/garages/${this.current_garage_spot.place_id}/",
-                            this.current_garage_spot
-                        )
-                        .then((res) => {
-                            this.current_garage_spot = res.data;
-                            this.getGaragesSpots();
-                        })
-                        .catch((err) => {
-                            console.log(err);
-                        });
-                },
-                deleteGaragesSpot: function (id) {
-                    axios
-                        .delete("api/garages/${id}/")
-                        .then((res) => {
-                            this.getGaragesSpots();
-                        })
-                        .catch((err) => {
-                            console.log(err);
-                        });
-                },
-            },
+                },            },
             mounted: function () {
                 this.getGaragesSpots();
             },
