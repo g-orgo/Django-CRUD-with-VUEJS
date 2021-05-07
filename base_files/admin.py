@@ -1,3 +1,4 @@
 from django.contrib import admin
+from base_files.models import Garage_place
 
-# Register your models here.
+admin.site.register(Garage_place)

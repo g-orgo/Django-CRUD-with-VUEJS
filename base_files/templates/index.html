@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Garagem do gordão</title>
+        <!-- Vue, Vue-resource and bootstrap-vue js files -->
+        <script src="//unpkg.com/vue@latest/dist/vue.min.js"></script>
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/vue-resource/1.5.2/vue-resource.min.js"
+            integrity="sha512-Am8+hkAj/kQ7/61O54elZdfe+h5jNASXXhbNoZwU+zo1JrnsktKR1+r3S0Mz3VKKBwBO101hZw4IiM1H7atY6Q=="
+            crossorigin="anonymous"
+        ></script>
+        <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.js"></script>
+
+        <!-- Bootstrap css files -->
+        <link
+            type="text/css"
+            rel="stylesheet"
+            href="//unpkg.com/bootstrap/dist/css/bootstrap.min.css"
+        />
+        <link
+            type="text/css"
+            rel="stylesheet"
+            href="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.css"
+        />
+
+        <!-- Axios -->
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"
+            integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ=="
+            crossorigin="anonymous"
+        ></script>
+    </head>
+
+    <body>
+        <b-container id="app">
+            <b-row class="mt-2">
+                <b-btn variant="success"> Adicionar vaga </b-btn>
+            </b-row>
+            <b-row>
+                [{ garages_spots }]
+            </b-row>
+        </b-container>
+    </body>
+
+    <script type="text/javascript">
+        let app = new Vue({
+            el: "#app",
+            delimiters: ["[{", "}]"],
+            data: {
+                garages_spots: [],
+                msg: "Vue instalado, Ramon :)",
+                current_garage_spot: {},
+                blank_spot: {
+                    garage_name: null,
+                },
+            },
+            methods: {
+                getGaragesSpots: function () {
+                    axios
+                        .get("api/garages/")
+                        .then((res) => {
+                            this.garages_spots = res.data;
+                            console.log(res);
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                        });
+                },
+                getGaragesSpot: function (id) {
+                    axios
+                        .get("api/garages/${id}/")
+                        .then((res) => {
+                            this.current_garage_spot = res.data;
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                        });
+                },
+                addGaragesSpots: function () {
+                    axios
+                        .post("api/garages/", this.blank_spot)
+                        .then((res) => {
+                            this.getGaragesSpots();
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                        });
+                },
+                updateGaragesSpot: function () {
+                    axios
+                        .put(
+                            "api/garages/${this.current_garage_spot.place_id}/",
+                            this.current_garage_spot
+                        )
+                        .then((res) => {
+                            this.current_garage_spot = res.data;
+                            this.getGaragesSpots();
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                        });
+                },
+                deleteGaragesSpot: function (id) {
+                    axios
+                        .delete("api/garages/${id}/")
+                        .then((res) => {
+                            this.getGaragesSpots();
+                        })
+                        .catch((err) => {
+                            console.log(err);
+                        });
+                },
+            },
+            mounted: function () {
+                this.getGaragesSpots();
+            },
+        });
+    </script>
+</html>
