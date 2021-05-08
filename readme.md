@@ -7,6 +7,6 @@ I'll try to describe each step and talk a little about it,
 fell free to open an issue if you discord on something.
 
 1. Install and set things up
-    - Django(https://github.com/g-orgo/Django-CRUD-with-VUEJS#django)
+    - [Django](https://github.com/g-orgo/Django-CRUD-with-VUEJS#django)
 
 ## Django
