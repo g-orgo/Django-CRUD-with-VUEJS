@@ -18,4 +18,4 @@ to init a project start with
 
 and so on you separate your application into some kind of modules called apps. Using
 
-    python manage.py startapp polls
+    python manage.py startapp <YOUR_APP>
