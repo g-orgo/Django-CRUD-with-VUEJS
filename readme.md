@@ -10,15 +10,12 @@
 
 ## Django
 
-    To Django, as specified in [DJANGO documentation](https://www.djangoproject.com/),
-    to init a project start with
+To Django, as specified in [DJANGO documentation](https://www.djangoproject.com/),
+to init a project start with
 
-    ```
     django-admin startproject <YOUR_PROJECT>
-    ```
 
-    and so on you separate your application into some kind of modules called apps. Using
 
-    ```
+and so on you separate your application into some kind of modules called apps. Using
+
     python manage.py startapp polls
-    ```
