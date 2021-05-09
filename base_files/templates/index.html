@@ -4,12 +4,8 @@
         <meta charset="UTF-8" />
         <title>Garagem do gordão</title>
         <!-- Vue and bootstrap-vue js files -->
-        <script
-        src="//unpkg.com/vue@latest/dist/vue.min.js"
-        ></script>
-        <script
-        src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.js"
-        ></script>
+        <script src="//unpkg.com/vue@latest/dist/vue.min.js"></script>
+        <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.js"></script>
 
         <!-- Bootstrap css files -->
         <link
@@ -33,23 +29,16 @@
 
     <body>
         <b-container id="app">
-            <b-row>
-                [{ garages_spots }]
-            </b-row>
+            <b-row> [{ garages_spots }] </b-row>
         </b-container>
     </body>
 
-    <script type="text/javascript">
+    <script>
         let app = new Vue({
             el: "#app",
             delimiters: ["[{", "}]"],
             data: {
                 garages_spots: [],
-                msg: "Vue instalado, Ramon :)",
-                current_garage_spot: {},
-                blank_spot: {
-                    garage_name: null,
-                },
             },
             methods: {
                 getGaragesSpots: function () {
@@ -62,7 +51,8 @@
                         .catch((err) => {
                             console.log(err);
                         });
-                },            },
+                },
+            },
             mounted: function () {
                 this.getGaragesSpots();
             },
