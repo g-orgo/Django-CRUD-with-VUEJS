@@ -152,7 +152,7 @@ TEMPLATES = [
 ]
 ```
 
-So on call for vue cdn.
+So on call for vue _CDN_.
 
 ```
     <script

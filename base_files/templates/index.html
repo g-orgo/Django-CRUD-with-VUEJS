@@ -33,12 +33,46 @@
 
     <body>
         <b-container id="app">
-            <b-row>
-                <b-btn v-on:click="createGarageSpot()">
-                    Ocupar vaga de forma anônima
-                </b-btn>
+            <b-row v-if="available_spot">
+                <b-btn v-on:click="createGarageSpot()"> Adicionar vaga </b-btn>
             </b-row>
-            <b-row> [{ garages_spots }] </b-row>
+
+            <b-row v-if="editing.state">
+                <b-input
+                    placeholder="Novo nome"
+                    v-model="new_garage_name.garage_name"
+                ></b-input>
+                <b-btn
+                    variant="success"
+                    v-on:click="updateGarageSpot(editing.editing_garage_id, new_garage_name)"
+                    >Modificar</b-btn
+                >
+            </b-row>
+
+            <!--             <b-row> [{ garages_spots }] </b-row> -->
+            <b-row class="mt-3">
+                <b-col
+                    v-for="garages in garages_spots"
+                    :key="garages.garage_id"
+                    class="mt-2"
+                >
+                    <b-card :header="garages.garage_name">
+                        <b-row class="mt-1">
+                            <b-btn
+                                variant="success"
+                                v-on:click="editGarageName(garages.garage_name, garages.garage_id)"
+                                >Modificar</b-btn
+                            >
+                            <b-btn
+                                variant="danger"
+                                v-on:click="deleteGarage(garages.garage_id)"
+                                class="mt-1"
+                                >Excluir</b-btn
+                            >
+                        </b-row>
+                    </b-card>
+                </b-col>
+            </b-row>
         </b-container>
     </body>
 
@@ -53,27 +87,72 @@
                 blank_garage: {
                     garage_name: "anonymous",
                 },
+                new_garage_name: {
+                    garage_name: "",
+                },
+                editing: {
+                    state: false,
+                    editing_garage_id: "",
+                    current_name: "",
+                },
+                available_spot: true,
             },
             methods: {
                 getGaragesSpots: function () {
-                    axios
-                        .get("api/garages/")
-                        .then((res) => {
-                            this.garages_spots = res.data;
-                        })
-                        .catch((err) => {
-                            console.log(err);
-                        });
+                    axios.get("api/garages/").then((res) => {
+                        this.garages_spots = res.data;
+                    });
                 },
                 createGarageSpot: function () {
+                    if (this.garages_spots.length >= 12) {
+                        alert("A garagem só aceita 12 carros ao mesmo tempo");
+                        this.available_spot = false;
+                    } else {
+                        axios
+                            .post("api/garages/", this.blank_garage, {
+                                headers: { "X-CSRFTOKEN": csrftoken },
+                            })
+                            .then((res) => {
+                                this.getGaragesSpots();
+                            });
+                    }
+                },
+                updateGarageSpot: function (garageId, newGarageData) {
                     axios
-                        .post("api/garages/", this.blank_garage, {
+                        .put(`api/garages/${garageId}/`, newGarageData, {
+                            headers: { "X-CSRFTOKEN": csrftoken },
+                        })
+                        .then((res) => {
+                            this.editing.state = false;
+                            this.getGaragesSpots();
+                        })
+                        .catch((err) => {
+                            alert("Você tem que digitar algo!");
+                        });
+
+                    if (this.garages_spots.length != 12) {
+                        this.available_spot = true;
+                    }
+                },
+                editGarageName: function (currentName, garageId) {
+                    let state = (this.editing.state = true);
+                    let current_name = (this.editing.current_name = currentName);
+                    let edited_garage_id = (this.editing.editing_garage_id = parseInt(
+                        garageId
+                    ));
+                    this.available_spot = false;
+                },
+                deleteGarage: function (garageId) {
+                    axios
+                        .delete(`api/garages/${garageId}/`, {
                             headers: { "X-CSRFTOKEN": csrftoken },
                         })
                         .then((res) => {
                             this.getGaragesSpots();
-                            /* console.log(res); */
                         });
+                    if (this.garages_spots.length <= 12) {
+                        this.available_spot = true;
+                    }
                 },
             },
             mounted: function () {
@@ -81,4 +160,11 @@
             },
         });
     </script>
+
+    <style>
+        .card {
+            min-width: 175px;
+            max-width: 175px;
+        }
+    </style>
 </html>
