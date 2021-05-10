@@ -12,8 +12,11 @@ fell free to open an issue if you discord on something.
     - [Router](https://github.com/g-orgo/Django-CRUD-with-VUEJS#router)
 3. [VUE template integration](https://github.com/g-orgo/Django-CRUD-with-VUEJS#vue-template-integration)
     - [methods](https://github.com/g-orgo/Django-CRUD-with-VUEJS#endpoints)
+4. [CRUD](https://github.com/g-orgo/Django-CRUD-with-VUEJS#crud)
     - ["C"rud](https://github.com/g-orgo/Django-CRUD-with-VUEJS#creating-objects-in-db)
     - [c"R"ud](https://github.com/g-orgo/Django-CRUD-with-VUEJS#render-db-callings)
+    - [cr"U"d](https://github.com/g-orgo/Django-CRUD-with-VUEJS#changing-info-from-db-objects)
+    - [cru"D"](https://github.com/g-orgo/Django-CRUD-with-VUEJS#deleting-db-objects)
 
 ## Django basics
 
@@ -188,14 +191,14 @@ You will use [methods()](https://v1.vuejs.org/guide/events.html) from vue to set
 
 ```
 data: {
-    garages_spots: [],
+    object_spots: [],
 },
 methods: {
-    getGaragesSpots: function () {
+    getObjects: function () {
         axios
-        .get("api/garages/")
+        .get("api/<API_ENDPOINT>/")
         .then((res) => {
-            this.garages_spots = res.data;
+            this.object_spots = res.data;
         })
         .catch((err) => {
             console.log(err);
@@ -204,15 +207,17 @@ methods: {
 },
 ```
 
-`getGaragesSpots()` make an axios request to `"/api/"` router declarated in `<YOUR_PROJECT>/<YOUR_PROJECT>/urls.py` and `"/garages/"` declarated in `<YOUR_PROJECT>/<YOUR_PROJECT>/routers.py`. The response of it is the data we want, and `this.garages_sposts = res.data;` takes the lead to change the data inside this empty array we just created minutes ago in `data()`
+`getObjects()` make an axios request to `"/api/"` router declarated in `<YOUR_PROJECT>/<YOUR_PROJECT>/urls.py` and `"/<API_ENDPOINT>/"` declarated in `<YOUR_PROJECT>/<YOUR_PROJECT>/routers.py`. The response of it is the data we want, and `this.object_spots = res.data;` takes the lead to change the data inside this empty array we just created minutes ago in `data()`.
+
+# CRUD
 
 ## Render DB callings
 
-For showcase purpose i'll use a simple `</p>` tag to render db pure data. I'm getting it using `getGaragesSpots()`, but for it i must call it using [created()](https://br.vuejs.org/v2/api/#created) or [mounted()](https://br.vuejs.org/v2/api/#mounted) vue functions.
+For showcase purpose i'll use a simple `</p>` tag to render db pure data. I'm getting it using `getObjects()`, but for it i must call it using [created()](https://br.vuejs.org/v2/api/#created) or [mounted()](https://br.vuejs.org/v2/api/#mounted) vue functions.
 
 ```
     mounted: function () {
-        this.getGaragesSpots();
+        this.getObjects();
     },
 ```
 
@@ -225,8 +230,8 @@ Django has some middlewares you'll need to deal with, and at this point knowing 
 ```
     data: {
         ...
-        blank_garage: {
-            garage_name: "empty",
+        blank_object: {
+            object_name: "empty",
         },
     },
 ```
@@ -236,19 +241,19 @@ And in `methods()` obviously increase an endpoint.
 ```
     methods: {
         ...
-        createGarageSpot: function () {
+        createObject: function () {
             axios
-            .post("api/garages/", this.blank_garage, {
+            .post("api/<API_ENDPOINT>/", this.blank_object, {
                 headers: { "X-CSRFTOKEN": csrftoken }
             })
             .then((res) => {
-                this.getGaragesSpots();
+                this.getObjects();
             });
         },
     }
 ```
 
-Here we have some diferences from the first endpoint such as `this.blank_garage` and `{headers: { "X-CSRFTOKEN": <YOUR_CSRFTOKEN> }})`, the first one give data to the request and the other adds your csrftoken to headers. If you don't know how to get your CSRFTOKEN i used a javascript [cookie lib](https://github.com/js-cookie/js-cookie) to pass through it.
+Here we have some diferences from the first endpoint such as `this.blank_object` and `{headers: { "X-CSRFTOKEN": <YOUR_CSRFTOKEN> }})`, the first one give data to the request and the other adds your csrftoken to headers. If you don't know how to get your CSRFTOKEN i used a javascript [cookie lib](https://github.com/js-cookie/js-cookie) to pass through it.
 
 Getting it via _CDN_
 
@@ -274,7 +279,48 @@ Creating a variable to acess it
 And for last add an event trigger to it, like a button or something
 
 ```
-    <button v-on:click="createGarageSpot()">
+    <button v-on:click="createObject()">
         ...
     </button>
+```
+
+## Changing info from DB objects
+
+To update info you will need to use object ID, as specified inside Model class in `<YOUR_PROJECT>/<YOUR_APP>/models.py` or [django default primary key field](https://docs.djangoproject.com/en/3.2/topics/db/models/#automatic-primary-key-fields). Add an editing model to `data()` (or use the one you created for *C*rud and as ID you can use the `:key` attribute you've used to `v-for`):
+
+```
+    new_object_name: {
+        object_id: "",
+        object_name: "",
+    },
+```
+
+and you'll need to pass this `object_id` as a param to update methods.
+
+```
+    updateObject: function (objectId, newObjectData) {
+        axios
+        .put(`api/<API_ENDPOINT>/${objectId}/`, newObjectData, { // IT'S IMPORTANT TO USE " ` " AS A JAVASCRIPT INTERPOLATION
+            headers: { "X-CSRFTOKEN": csrftoken },
+        })
+        .then((res) => {
+            this.getObjects();
+        })
+    },
+```
+
+## Deleting DB objects
+
+Also passing `object_id` param you can create cru*D*.
+
+```
+deleteGarage: function (objectId) {
+    axios
+        .delete(`api/<API_ENDPOINT>/${objectId}/`, {
+            headers: { "X-CSRFTOKEN": csrftoken },
+        })
+        .then((res) => {
+            this.getObjects();
+        });
+},
 ```

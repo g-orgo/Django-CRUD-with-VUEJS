@@ -33,23 +33,24 @@
 
     <body>
         <b-container id="app">
-            <b-row v-if="available_spot">
-                <b-btn v-on:click="createGarageSpot()"> Adicionar vaga </b-btn>
+            <b-row v-if="available_spot" class="mt-1">
+                <b-btn v-on:click="createGarageSpot()"> Adicionar ocupação de vaga </b-btn>
             </b-row>
 
             <b-row v-if="editing.state">
                 <b-input
                     placeholder="Novo nome"
                     v-model="new_garage_name.garage_name"
+                    class="mt-1"
                 ></b-input>
                 <b-btn
                     variant="success"
                     v-on:click="updateGarageSpot(editing.editing_garage_id, new_garage_name)"
+                    class="mt-1"
                     >Modificar</b-btn
                 >
             </b-row>
 
-            <!--             <b-row> [{ garages_spots }] </b-row> -->
             <b-row class="mt-3">
                 <b-col
                     v-for="garages in garages_spots"
