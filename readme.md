@@ -2,8 +2,9 @@
 
 ## Introduction
 
-Hello, I'll try to describe each step and talk a little about it,
-fell free to open an issue if you discord on something.
+Hello, my name is Gabriel,
+
+I do stream coding sometimes at [my twitch channel](https://www.twitch.tv/caruso323) and so on i did a tutorial to integrate Vue to Django using a CRUD example, in this repo i'll try to describe each step and talk a little about it, fell free to open an issue if you discord on something.
 
 1. [Django](https://github.com/g-orgo/Django-CRUD-with-VUEJS#django-basics)
 2. [REST framework](https://github.com/g-orgo/Django-CRUD-with-VUEJS#django-rest-framework-setting-up)
