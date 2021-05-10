@@ -3,6 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <title>Garagem do gordão</title>
+
         <!-- Vue and bootstrap-vue js files -->
         <script src="//unpkg.com/vue@latest/dist/vue.min.js"></script>
         <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.js"></script>
@@ -25,20 +26,33 @@
             integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ=="
             crossorigin="anonymous"
         ></script>
+
+        <!-- Javascript Cookie lib -->
+        <script src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"></script>
     </head>
 
     <body>
         <b-container id="app">
+            <b-row>
+                <b-btn v-on:click="createGarageSpot()">
+                    Ocupar vaga de forma anônima</b-btn
+                >
+            </b-row>
             <b-row> [{ garages_spots }] </b-row>
         </b-container>
     </body>
 
     <script>
+        const csrftoken = Cookies.get("csrftoken");
+
         let app = new Vue({
             el: "#app",
             delimiters: ["[{", "}]"],
             data: {
                 garages_spots: [],
+                blank_garage: {
+                    garage_name: "anonymous",
+                },
             },
             methods: {
                 getGaragesSpots: function () {
@@ -46,10 +60,19 @@
                         .get("api/garages/")
                         .then((res) => {
                             this.garages_spots = res.data;
-                            console.log(res);
                         })
                         .catch((err) => {
                             console.log(err);
+                        });
+                },
+                createGarageSpot: function () {
+                    axios
+                        .post("api/garages/", this.blank_garage, {
+                            headers: { "X-CSRFTOKEN": csrftoken },
+                        })
+                        .then((res) => {
+                            this.getGaragesSpots()
+                            /* console.log(res); */
                         });
                 },
             },

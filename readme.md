@@ -41,7 +41,7 @@ in your app folder create your urls file`<YOUR_PROJECT>/<YOUR_APP>/urls.py` and 
 
 ```
 
-you can nest it into your root url file to avoid urls like `(http://<YOUR_DOMAIN>/<YOUR_APP/<URL_YOU_DECIDE>)`
+you can nest it into your root url file to avoid urls like `(http://<YOUR_DOMAIN>/<YOUR_APP>/<URL_YOU_DECIDE>)`
 to do it you need to literally `include()` it in your `urls.py` file inside `<YOUR_PROJECT>/<YOUR_PROJECT>/`. It will look like this:
 
 ```
@@ -183,8 +183,7 @@ At the end of `/templates/<HTML_NAME>` create your script tag with vue instance,
 
 ## Endpoints
 
-You will use [methods()](https://v1.vuejs.org/guide/events.html) from vue to set endpoints for your CRUD (Create, read, update, delete) system. For this tutorial i will show only one of this endpoints and you'll know the way to create the other ones.
-In your vue instance add [data()](https://v3.vuejs.org/api/options-data.html#data) with an empty array and add `methods()` after it calling the data from server-side.
+You will use [methods()](https://v1.vuejs.org/guide/events.html) from vue to set endpoints for your CRUD (Create, read, update, delete) system. For example i will how to create  one of this endpoints and you'll know the way to create a c*R*ud call. In your vue instance add [data()](https://v3.vuejs.org/api/options-data.html#data) with an empty array and add `methods()`, after it call the data from server-side via http request using `axios`.
 
 ```
 data: {
@@ -193,20 +192,27 @@ data: {
 methods: {
     getGaragesSpots: function () {
         axios
-            .get("api/garages/")
-            .then((res) => {
-                this.garages_spots = res.data;
-                console.log(res);
-            })
-            .catch((err) => {
-                console.log(err);
-            });
+        .get("api/garages/")
+        .then((res) => {
+            this.garages_spots = res.data;
+        })
+        .catch((err) => {
+            console.log(err);
+        });
     },
 },
 ```
 
-`getGaragesSpots()` make an axios request to `"/api/"` router declarated in `<YOUR_PROJECT>/<YOUR_PROJECT>/urls.py` and `"/garages/"` declarated in `<YOUR_PROJECT>/<YOUR_PROJECT>/routers.py`. The response of it is the data we want and `this.garages_sposts = res.data;` takes the lead to change the data inside this empty array we created minutes ago in `data()`.
+`getGaragesSpots()` make an axios request to `"/api/"` router declarated in `<YOUR_PROJECT>/<YOUR_PROJECT>/urls.py` and `"/garages/"` declarated in `<YOUR_PROJECT>/<YOUR_PROJECT>/routers.py`. The response of it is the data we want, and `this.garages_sposts = res.data;` takes the lead to change the data inside this empty array we just created minutes ago in `data()`
 
 ## Render DB callings
 
-For showcase purpose i'll use a simple `</p>` tag to render db information i'm getting using `getGaragesSpots()` but for it you must call it using [created()](https://br.vuejs.org/v2/api/#created) or [mounted()](https://br.vuejs.org/v2/api/#mounted) vue functions
+For showcase purpose i'll use a simple `</p>` tag to render db pure data. I'm getting it using `getGaragesSpots()`, but for it i must call it using [created()](https://br.vuejs.org/v2/api/#created) or [mounted()](https://br.vuejs.org/v2/api/#mounted) vue functions.
+
+```
+    mounted: function () {
+        this.getGaragesSpots();
+    },
+```
+
+As your database is empty it doesn't do much. To check if it's working you can create one item using [django admin site](https://docs.djangoproject.com/en/1.8/intro/tutorial02/#writing-your-first-django-app-part-2) or [django shell](https://docs.djangoproject.com/en/3.1/intro/tutorial02/#playing-with-the-api) but you can use *C*rud itself for it.
