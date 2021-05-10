@@ -2,9 +2,9 @@
 
 ## Introduction
 
-Hello, my name is Gabriel,
+Hello! my name is Gabriel,
 
-I do stream coding sometimes at [my twitch channel](https://www.twitch.tv/caruso323) and so on i did a tutorial to integrate Vue to Django using a CRUD example, in this repo i'll try to describe each step and talk a little about it, fell free to open an issue if you discord on something.
+I do stream coding sometimes at [my twitch channel](https://www.twitch.tv/caruso323) and so on i did a tutorial to integrate Vue to Django using a CRUD example, in this repo i'll try to describe each step and talk a little about it. Fell free to open an issue if you discord on something.
 
 1. [Django](https://github.com/g-orgo/Django-CRUD-with-VUEJS#django-basics)
 2. [REST framework](https://github.com/g-orgo/Django-CRUD-with-VUEJS#django-rest-framework-setting-up)
@@ -125,10 +125,10 @@ from <YOUR_APP>.viewsets import GarageViewSet
 
 router = routers.DefaultRouter()
 
-router.register(r'garages', GarageViewSet)
+router.register(r'<API_ENDPOINT>', GarageViewSet)
 ```
 
-and at this point you should declare your api endpoint, it will make your URL look similar to `site.com/api/<SOMETHING>`.
+and at this point you should declare your api endpoint, it will make your URL look similar to `site.com/api/<API_ENDPOINT>`.
 
 `<YOUR_PROJECT>/<YOUR_PROJECT>/urls.py`
 
@@ -174,7 +174,7 @@ You can use vue-resource to http requests but i do prefer to use axios.
     ></script>
 ```
 
-At the end of `/templates/<HTML_NAME>` create your script tag with vue instance, it should look similar to it:
+At the end of `/templates/<HTML_NAME>` create a `<script/>` tag with your vue instance, it should look similar to it:
 
 ```
     let app = new Vue({
@@ -188,7 +188,7 @@ At the end of `/templates/<HTML_NAME>` create your script tag with vue instance,
 
 ## Endpoints
 
-You will use [methods()](https://v1.vuejs.org/guide/events.html) from vue to set endpoints for your CRUD (Create, read, update, delete) system. For example i will how to create one of this endpoints and you'll know the way to create a c*R*ud call. In your vue instance add [data()](https://v3.vuejs.org/api/options-data.html#data) with an empty array and add `methods()`, after it call the data from server-side via http request using `axios`.
+You will use [methods()](https://v1.vuejs.org/guide/events.html) from vue to set endpoints for your CRUD (Create, read, update, delete) system. For a c*R*ud call go to your vue instance and add [data()](https://v3.vuejs.org/api/options-data.html#data) with an empty array and add `methods()`, after it call the data from server-side via http request using `axios`.
 
 ```
 data: {
@@ -214,7 +214,7 @@ methods: {
 
 ## Render DB callings
 
-For showcase purpose i'll use a simple `</p>` tag to render db pure data. I'm getting it using `getObjects()`, but for it i must call it using [created()](https://br.vuejs.org/v2/api/#created) or [mounted()](https://br.vuejs.org/v2/api/#mounted) vue functions.
+For showcase purpose i'll use a simple `</p>` tag to render db pure data. I'm getting it using `getObjects()`, with a simple [created()](https://br.vuejs.org/v2/api/#created) or [mounted()](https://br.vuejs.org/v2/api/#mounted) vue function i'll call for this endpoint.
 
 ```
     mounted: function () {
@@ -254,9 +254,9 @@ And in `methods()` obviously increase an endpoint.
     }
 ```
 
-Here we have some diferences from the first endpoint such as `this.blank_object` and `{headers: { "X-CSRFTOKEN": <YOUR_CSRFTOKEN> }})`, the first one give data to the request and the other adds your csrftoken to headers. If you don't know how to get your CSRFTOKEN i used a javascript [cookie lib](https://github.com/js-cookie/js-cookie) to pass through it.
+Here we have some diferences from the first endpoint such as `this.blank_object` and `{headers: { "X-CSRFTOKEN": <YOUR_CSRFTOKEN> }})`, the first one give data to the request and the other one adds your csrftoken to headers. If you don't know how to get your CSRFTOKEN i used a javascript [cookie lib](https://github.com/js-cookie/js-cookie) to pass through it.
 
-Getting it via _CDN_
+Getting it lib via _CDN_
 
 ```
     <script
@@ -265,7 +265,7 @@ Getting it via _CDN_
 
 ```
 
-Creating a variable to acess it
+Creating a constant to acess it
 
 ```
     <script>
@@ -287,7 +287,7 @@ And for last add an event trigger to it, like a button or something
 
 ## Changing info from DB objects
 
-To update info you will need to use object ID, as specified inside Model class in `<YOUR_PROJECT>/<YOUR_APP>/models.py` or [django default primary key field](https://docs.djangoproject.com/en/3.2/topics/db/models/#automatic-primary-key-fields). Add an editing model to `data()` (or use the one you created for *C*rud and as ID you can use the `:key` attribute you've used to `v-for`):
+To update info you will need to use object ID, as specified inside Model class in `<YOUR_PROJECT>/<YOUR_APP>/models.py` or [django default primary key field](https://docs.djangoproject.com/en/3.2/topics/db/models/#automatic-primary-key-fields). Add an editing model to `data()` (or use the one you created for *C*rud example):
 
 ```
     new_object_name: {
@@ -325,3 +325,5 @@ deleteGarage: function (objectId) {
         });
 },
 ```
+
+# THE END
