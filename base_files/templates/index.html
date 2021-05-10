@@ -35,8 +35,8 @@
         <b-container id="app">
             <b-row>
                 <b-btn v-on:click="createGarageSpot()">
-                    Ocupar vaga de forma anônima</b-btn
-                >
+                    Ocupar vaga de forma anônima
+                </b-btn>
             </b-row>
             <b-row> [{ garages_spots }] </b-row>
         </b-container>
@@ -71,7 +71,7 @@
                             headers: { "X-CSRFTOKEN": csrftoken },
                         })
                         .then((res) => {
-                            this.getGaragesSpots()
+                            this.getGaragesSpots();
                             /* console.log(res); */
                         });
                 },

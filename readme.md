@@ -12,7 +12,8 @@ fell free to open an issue if you discord on something.
     - [Router](https://github.com/g-orgo/Django-CRUD-with-VUEJS#router)
 3. [VUE template integration](https://github.com/g-orgo/Django-CRUD-with-VUEJS#vue-template-integration)
     - [methods](https://github.com/g-orgo/Django-CRUD-with-VUEJS#endpoints)
-    - [render db data](https://github.com/g-orgo/Django-CRUD-with-VUEJS#render-db-callings)
+    - ["C"rud](https://github.com/g-orgo/Django-CRUD-with-VUEJS#creating-objects-in-db)
+    - [c"R"ud](https://github.com/g-orgo/Django-CRUD-with-VUEJS#render-db-callings)
 
 ## Django basics
 
@@ -183,7 +184,7 @@ At the end of `/templates/<HTML_NAME>` create your script tag with vue instance,
 
 ## Endpoints
 
-You will use [methods()](https://v1.vuejs.org/guide/events.html) from vue to set endpoints for your CRUD (Create, read, update, delete) system. For example i will how to create  one of this endpoints and you'll know the way to create a c*R*ud call. In your vue instance add [data()](https://v3.vuejs.org/api/options-data.html#data) with an empty array and add `methods()`, after it call the data from server-side via http request using `axios`.
+You will use [methods()](https://v1.vuejs.org/guide/events.html) from vue to set endpoints for your CRUD (Create, read, update, delete) system. For example i will how to create one of this endpoints and you'll know the way to create a c*R*ud call. In your vue instance add [data()](https://v3.vuejs.org/api/options-data.html#data) with an empty array and add `methods()`, after it call the data from server-side via http request using `axios`.
 
 ```
 data: {
@@ -216,3 +217,64 @@ For showcase purpose i'll use a simple `</p>` tag to render db pure data. I'm ge
 ```
 
 As your database is empty it doesn't do much. To check if it's working you can create one item using [django admin site](https://docs.djangoproject.com/en/1.8/intro/tutorial02/#writing-your-first-django-app-part-2) or [django shell](https://docs.djangoproject.com/en/3.1/intro/tutorial02/#playing-with-the-api) but you can use *C*rud itself for it.
+
+## Creating objects in DB
+
+Django has some middlewares you'll need to deal with, and at this point knowing about [Cross Site Request Forgery protection](https://docs.djangoproject.com/en/3.2/ref/csrf/#module-django.middleware.csrf) can save you some time. In my vue `data()` i'll create an empty slot to turn this job easier.
+
+```
+    data: {
+        ...
+        blank_garage: {
+            garage_name: "empty",
+        },
+    },
+```
+
+And in `methods()` obviously increase an endpoint.
+
+```
+    methods: {
+        ...
+        createGarageSpot: function () {
+            axios
+            .post("api/garages/", this.blank_garage, {
+                headers: { "X-CSRFTOKEN": csrftoken }
+            })
+            .then((res) => {
+                this.getGaragesSpots();
+            });
+        },
+    }
+```
+
+Here we have some diferences from the first endpoint such as `this.blank_garage` and `{headers: { "X-CSRFTOKEN": <YOUR_CSRFTOKEN> }})`, the first one give data to the request and the other adds your csrftoken to headers. If you don't know how to get your CSRFTOKEN i used a javascript [cookie lib](https://github.com/js-cookie/js-cookie) to pass through it.
+
+Getting it via _CDN_
+
+```
+    <script
+        src="https://cdn.jsdelivr.net/npm/js-cookie@rc/dist/js.cookie.min.js"
+    ></script>
+
+```
+
+Creating a variable to acess it
+
+```
+    <script>
+        const csrftoken = Cookies.get("csrftoken");
+
+        let app = new Vue({
+            ...
+        });
+    </script>
+```
+
+And for last add an event trigger to it, like a button or something
+
+```
+    <button v-on:click="createGarageSpot()">
+        ...
+    </button>
+```
