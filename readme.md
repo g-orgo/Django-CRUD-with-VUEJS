@@ -87,6 +87,9 @@ after it you'll need to create [serializers](https://www.django-rest-framework.o
         garage_name = models.CharField(max_length=100)
 ```
 
+
+**DONT FORGET TO MIGRATE YOUR CHANGES**
+
 ## Serializers
 
 Serializers work very similarly to Django `Form` and `ModelForm` libs, they allow complex data such as querysets and model instances to be converted to native Python datatypes. My serializer file (you will need to create it), located in `<YOUR_PROJECT>/<YOUR_APP>/serializers.py`, look like this...
